@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+sqlalchemy[asyncio]
+asyncpg
+pydantic-settings
+python-jose[cryptography]
+passlib[bcrypt]          # si tu hashes des mots de passe
+python-multipart         # si tu gères des formulaires/upload
+email-validator          # si tu utilises pydantic EmailStr
+email-validator

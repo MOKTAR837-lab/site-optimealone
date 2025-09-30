@@ -1,0 +1,39 @@
+services:
+  db:
+    image: postgres:16
+    container_name: optimeal-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: optimeal
+      TZ: Europe/Paris
+      PGTZ: Europe/Paris
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  api:
+    build: ./backend
+    container_name: optimeal-api
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    environment:
+      API_KEY: "ta_cle_api_interne_tres_longue"
+      DATABASE_URL: "postgresql+asyncpg://postgres:${POSTGRES_PASSWORD}@db:5432/optimeal"
+    volumes:
+      - ./backend:/app
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      - db
+
+  adminer:
+    image: adminer:latest
+    container_name: optimeal-adminer
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+
+volumes:
+  postgres_data:

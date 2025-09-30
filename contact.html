@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Contact – Optimeal Health</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;max-width:760px;margin:2rem auto;padding:0 1rem;}
+    form{display:grid;gap:.75rem}
+    input,button{font:inherit;padding:.6rem;border:1px solid #ccc;border-radius:.5rem}
+    button{cursor:pointer}
+    .ok{color:green}.err{color:#b00}
+    a{color:#16a34a;text-decoration:none}
+  </style>
+</head>
+<body>
+  <p><a href="/index.html">← Retour</a></p>
+  <h1>Contact</h1>
+  <p>Site pédagogique : laissez vos coordonnées, on vous recontacte.</p>
+
+  <form id="contactForm">
+    <label>Prénom<br><input name="firstname" required></label>
+    <label>Nom<br><input name="lastname" required></label>
+    <label>Email<br><input type="email" name="email" required></label>
+    <button type="submit">Envoyer</button>
+  </form>
+
+  <p id="contactResult"></p>
+
+  <script>
+    const API_BASE = "http://127.0.0.1:8000/api/v1";
+    document.addEventListener("DOMContentLoaded", () => {
+      const f = document.getElementById("contactForm");
+      const out = document.getElementById("contactResult");
+      f.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const firstname = f.firstname.value.trim();
+        const lastname  = f.lastname.value.trim();
+        const email     = f.email.value.trim();
+        const payload = {
+          name: (firstname + " " + lastname).trim(),
+          email: email,
+          message: "Contact initial (landing)"
+        };
+        out.className=""; out.textContent="Envoi...";
+        try{
+          const res = await fetch(`${API_BASE}/public/contact`, {
+            method:"POST",
+            headers:{ "Content-Type":"application/json" },
+            body: JSON.stringify(payload),
+            mode:"cors"
+          });
+          if(res.status===202){
+            out.className="ok"; out.textContent="Merci ! Nous vous recontactons rapidement ✅";
+            f.reset();
+          }else{
+            const err=await res.json().catch(()=>({}));
+            out.className="err"; out.textContent = "Erreur: " + (err.detail? JSON.stringify(err.detail) : `${res.status} ${res.statusText}`);
+          }
+        }catch(e2){
+          out.className="err"; out.textContent="Erreur réseau: "+e2;
+        }
+      });
+    });
+  </script>
+</body>
+</html>

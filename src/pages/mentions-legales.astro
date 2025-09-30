@@ -1,0 +1,12 @@
+---
+import Base from "../layouts/Base.astro";
+const SITE = Astro.site?.href ?? "https://optimealhealth.com";
+const title = "Mentions légales — Optimeal Health";
+const description = "Mentions légales du site Optimeal Health.";
+---
+<Base {title} {description} canonical={`${SITE}mentions-legales`}>
+  <main class="mx-auto max-w-screen-md px-4 py-12">
+    <h1 class="mb-4 text-2xl font-bold">Mentions légales</h1>
+    <p class="text-slate-600">Éditeur : EURL GOUDY — SIREN 532 569 084</p>
+  </main>
+</Base>
