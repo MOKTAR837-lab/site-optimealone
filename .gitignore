@@ -21,3 +21,13 @@ docker-compose.override.yml
 # OS
 .DS_Store
 Thumbs.db
+node_modules/
+.env
+.env.*
+_backup_*/
+dist/
+build/
+.cache/
+.tmp/
+.DS_Store
+*.log
