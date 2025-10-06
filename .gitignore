@@ -31,3 +31,4 @@ build/
 .tmp/
 .DS_Store
 *.log
+_backup_*/
