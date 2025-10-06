@@ -1,9 +1,406 @@
 ---
-import Base from '../layouts/Base.astro';
+
+
+const site = 'https://optimealhealth.com';
+const title = "Conseils Nutrition Ãƒâ€°ducatifs par un DiÃƒÂ©tÃƒÂ©ticien DiplÃƒÂ´mÃƒÂ© d'Ãƒâ€°tat";
+const description =
+  "Posez vos questions de nutrition et obtenez des rÃƒÂ©ponses ÃƒÂ©ducatives, sourcÃƒÂ©es et claires. Freemium, sans conseils mÃƒÂ©dicaux personnalisÃƒÂ©s.";
 ---
-<Base title='Accueil'>
-  <main class='p-6'>
-    <h1 class='text-3xl font-bold'>Astro est en place ?</h1>
-    <p class='text-slate-600'>Backend: </p>
-  </main>
-</Base>
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="index,follow" />
+
+    <!-- Canonical -->
+    <link rel="canonical" href={`${site}/`} />
+
+    <!-- Open Graph -->
+    <meta property="og:site_name" content="Optimeal Health" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={site} />
+    <meta property="og:image" content="/assets/og-image.jpg" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Conseils Nutrition Ãƒâ€°ducatifs Ã¢â‚¬â€ Optimeal Health" />
+    <meta name="twitter:description" content="Posez vos questions de nutrition et obtenez des rÃƒÂ©ponses ÃƒÂ©ducatives, sourcÃƒÂ©es et claires." />
+    <meta name="twitter:image" content="/assets/og-image.jpg" />
+
+    <!-- JSON-LD Organization -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Optimeal Health",
+        "url": "https://optimealhealth.com",
+        "logo": "/assets/logo.svg",
+        "sameAs": ["https://www.linkedin.com/company/exemple"]
+      }
+    </script>
+
+    <!-- Optionnel : Google Fonts (ton CSP les autorise dÃƒÂ©jÃƒÂ ) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root { --font-sans: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
+      html { scroll-behavior: smooth; }
+      body { font-family: var(--font-sans); }
+    </style>
+  </head>
+
+  <body class="bg-white text-slate-800 antialiased">
+    <!-- Banner cookies (simple, sans emoji) -->
+    <div id="cookie-banner" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[95%] md:w-auto hidden">
+      <div class="bg-slate-900 text-white rounded-2xl p-4 md:p-5 shadow-xl flex flex-col md:flex-row gap-4 items-start md:items-center">
+        <p class="text-sm leading-relaxed">
+          Nous utilisons des cookies pour des mesures d'audience anonymisÃƒÂ©es. Aucune donnÃƒÂ©e de santÃƒÂ© n'est collectÃƒÂ©e.
+          <a href="#privacy" class="underline">En savoir plus</a>.
+        </p>
+        <div class="flex gap-2 md:ml-auto">
+          <button id="cookie-reject" class="px-3 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-sm">Refuser</button>
+          <button id="cookie-accept" class="px-3 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-sm font-semibold">Accepter</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-40 backdrop-blur bg-white/80 border-b border-slate-200">
+      <div class="mx-auto max-w-screen-xl px-4 py-3 flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2">
+          <img src="/assets/logo.svg" alt="Optimeal Health" class="h-9 w-9" />
+          <span class="font-semibold">Optimeal Health</span>
+        </a>
+
+        <nav class="hidden md:flex items-center gap-6 text-sm">
+          <a href="#features" class="hover:text-emerald-600">FonctionnalitÃƒÂ©s</a>
+          <a href="#pricing" class="hover:text-emerald-600">Offres</a>
+          <a href="#faq" class="hover:text-emerald-600">FAQ</a>
+          <a href="#blog" class="hover:text-emerald-600">Blog</a>
+          <a href="/contact" class="hover:text-emerald-600">Contact</a>
+          <a href="#login" class="text-slate-600">Connexion</a>
+          <a href="#cta" class="px-4 py-2 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 font-semibold">Essayer gratuitement</a>
+        </nav>
+
+        <button id="menuBtn" class="md:hidden inline-flex items-center justify-center h-10 w-10 rounded-xl border border-slate-300">
+          <span class="sr-only">Ouvrir le menu</span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Menu mobile -->
+      <div id="mobileMenu" class="md:hidden hidden border-t border-slate-200">
+        <div class="mx-auto max-w-screen-xl px-4 py-3 flex flex-col gap-3 text-sm">
+          <a href="#features" class="hover:text-emerald-600">FonctionnalitÃƒÂ©s</a>
+          <a href="#pricing" class="hover:text-emerald-600">Offres</a>
+          <a href="#faq" class="hover:text-emerald-600">FAQ</a>
+          <a href="#blog" class="hover:text-emerald-600">Blog</a>
+          <a href="/contact" class="hover:text-emerald-600">Contact</a>
+          <a href="#login" class="text-slate-600">Connexion</a>
+          <a href="#cta" class="px-4 py-2 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 font-semibold w-max">Essayer gratuitement</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <section id="cta" class="relative">
+      <div class="mx-auto max-w-screen-xl px-4 py-14 md:py-20 grid md:grid-cols-2 gap-10 items-center">
+        <div>
+          <h1 class="text-3xl md:text-5xl font-extrabold leading-tight">
+            Posez vos questions nutrition ÃƒÂ  un <span class="text-emerald-600">diÃƒÂ©tÃƒÂ©ticien diplÃƒÂ´mÃƒÂ© d'Ãƒâ€°tat</span>Ã¢â‚¬Â¦ gratuitement !
+          </h1>
+          <p class="mt-4 text-lg text-slate-600">
+            Obtenez des rÃƒÂ©ponses ÃƒÂ©ducatives, sourcÃƒÂ©es et claires en quelques secondes. Aucune donnÃƒÂ©e de santÃƒÂ©, uniquement de l'information gÃƒÂ©nÃƒÂ©rale.
+          </p>
+          <div class="mt-6 flex flex-col sm:flex-row gap-3">
+            <a href="#signup" class="px-6 py-3 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 font-semibold text-center">Essayer gratuitement maintenant</a>
+            <a href="#demo" class="px-6 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 font-semibold text-center">Voir une dÃƒÂ©mo</a>
+          </div>
+          <p class="mt-3 text-xs text-slate-500">Freemium : 10 questions/jour, pas de conseil mÃƒÂ©dical personnalisÃƒÂ©.</p>
+        </div>
+
+        <!-- Demo chat mockup -->
+        <div id="demo" class="bg-white border border-slate-200 rounded-2xl shadow-xl p-4">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
+              <span class="text-sm text-slate-500">Assistant ÃƒÂ©ducatif</span>
+            </div>
+            <span class="text-xs text-slate-400">DÃƒÂ©mo</span>
+          </div>
+          <div class="space-y-4 text-sm">
+            <div class="flex gap-3">
+              <div class="shrink-0 h-8 w-8 rounded-full bg-slate-200"></div>
+              <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3 max-w-[90%]">
+                <p>Combien de protÃƒÂ©ines par jour pour un adulte ?</p>
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <div class="shrink-0 h-8 w-8 rounded-full bg-emerald-100"></div>
+              <div class="bg-white border border-slate-200 rounded-2xl p-3 max-w-[90%]">
+                <p class="font-medium">RÃƒÂ©ponse (ÃƒÂ©ducative, non clinique)</p>
+                <ul class="list-disc pl-5 mt-1 text-slate-700">
+                  <li>RepÃƒÂ¨re gÃƒÂ©nÃƒÂ©ral : Ã¢â€°Ë† 0,8 g/kg/jour (source pÃƒÂ©dagogique).</li>
+                  <li>PrivilÃƒÂ©gier variÃƒÂ©tÃƒÂ© (animales & vÃƒÂ©gÃƒÂ©tales).</li>
+                  <li>Pour une recommandation personnalisÃƒÂ©e Ã¢â€ â€™ consulter un professionnel.</li>
+                </ul>
+                <p class="text-xs text-slate-500 mt-2">Citations : Cours Ã¢â‚¬Å“ProtÃƒÂ©inesÃ¢â‚¬Â, Chap. 2</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="py-16 md:py-20 bg-slate-50">
+      <div class="mx-auto max-w-screen-xl px-4">
+        <h2 class="text-2xl md:text-3xl font-bold text-center">Pourquoi c'est utile</h2>
+        <p class="text-center text-slate-600 mt-2">Ãƒâ€°ducation nutritionnelle fiable, rapide et transparente.</p>
+
+        <div class="grid md:grid-cols-3 gap-6 mt-10">
+          <div class="bg-white border border-slate-200 rounded-2xl p-6">
+            <div class="h-10 w-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center mb-4">1</div>
+            <h3 class="font-semibold">Ãƒâ€°ducatif & sourcÃƒÂ©</h3>
+            <p class="text-sm text-slate-600 mt-1">BasÃƒÂ© sur vos supports et sources officielles. Citations incluses.</p>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-2xl p-6">
+            <div class="h-10 w-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center mb-4">2</div>
+            <h3 class="font-semibold">Rapide & simple</h3>
+            <p class="text-sm text-slate-600 mt-1">Posez une question, obtenez une rÃƒÂ©ponse claire en quelques secondes.</p>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-2xl p-6">
+            <div class="h-10 w-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center mb-4">3</div>
+            <h3 class="font-semibold">Respect du cadre</h3>
+            <p class="text-sm text-slate-600 mt-1">Information gÃƒÂ©nÃƒÂ©rale uniquement. Aucune donnÃƒÂ©e de santÃƒÂ© collectÃƒÂ©e.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="py-16 md:py-20">
+      <div class="mx-auto max-w-screen-xl px-4">
+        <h2 class="text-2xl md:text-3xl font-bold text-center">Commencez gratuitement</h2>
+        <p class="text-center text-slate-600 mt-2">Passez au Premium ÃƒÂ  votre rythme, quand vous en ressentez la valeur.</p>
+
+        <div class="grid md:grid-cols-2 gap-6 mt-10">
+          <!-- Freemium -->
+          <div class="border border-slate-200 rounded-2xl p-6">
+            <h3 class="text-xl font-semibold">Freemium</h3>
+            <p class="text-slate-600">IdÃƒÂ©al pour dÃƒÂ©couvrir</p>
+            <p class="text-4xl font-extrabold mt-4">0Ã¢â€šÂ¬<span class="text-base font-medium text-slate-500">/mois</span></p>
+            <ul class="mt-6 space-y-2 text-sm">
+              <li class="flex items-start gap-2">Ã¢Å“â€ 10 questions/jour</li>
+              <li class="flex items-start gap-2">Ã¢Å“â€ RÃƒÂ©ponses ÃƒÂ©ducatives sourcÃƒÂ©es</li>
+              <li class="flex items-start gap-2">Ã¢Å“â€ AccÃƒÂ¨s au blog & newsletter</li>
+              <li class="flex items-start gap-2">Ã¢Å“â€“ Historique & exports PDF</li>
+            </ul>
+            <a href="#signup" class="mt-6 inline-block px-5 py-3 rounded-xl bg-slate-900 text-white hover:bg-slate-800 font-semibold">Essayer gratuitement</a>
+          </div>
+
+          <!-- Premium -->
+          <div class="border-2 border-emerald-600 rounded-2xl p-6 relative">
+            <span class="absolute -top-3 right-4 bg-emerald-600 text-white text-xs px-2 py-1 rounded-full">Populaire</span>
+            <h3 class="text-xl font-semibold">Premium</h3>
+            <p class="text-slate-600">Pour un usage intensif</p>
+            <p class="text-4xl font-extrabold mt-4">9,90Ã¢â€šÂ¬<span class="text-base font-medium text-slate-500">/mois</span></p>
+            <ul class="mt-6 space-y-2 text-sm">
+              <li class="flex items-start gap-2">Ã¢Å“â€ Questions illimitÃƒÂ©es</li>
+              <li class="flex items-start gap-2">Ã¢Å“â€ Historique personnel</li>
+              <li class="flex items-start gap-2">Ã¢Å“â€ Export PDF (plans types)</li>
+              <li class="flex items-start gap-2">Ã¢Å“â€ Guides exclusifs</li>
+            </ul>
+            <a href="#signup" class="mt-6 inline-block px-5 py-3 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 font-semibold">Passer au Premium</a>
+          </div>
+        </div>
+
+        <p class="text-xs text-slate-500 mt-6 text-center">
+          Information ÃƒÂ  visÃƒÂ©e ÃƒÂ©ducative, ne remplace pas un avis mÃƒÂ©dical. Pas de conseil personnalisÃƒÂ©.
+        </p>
+      </div>
+    </section>
+
+    <!-- TÃƒÂ©moignages -->
+    <section class="py-16 bg-slate-50">
+      <div class="mx-auto max-w-screen-xl px-4">
+        <h2 class="text-2xl md:text-3xl font-bold text-center">Ils en parlent</h2>
+        <div class="grid md:grid-cols-3 gap-6 mt-10">
+          <figure class="bg-white border border-slate-200 rounded-2xl p-6 text-sm">
+            <blockquote>Ã‚Â« RÃƒÂ©ponses claires, sourcÃƒÂ©es, sans blabla. Parfait pour comprendre lÃ¢â‚¬â„¢essentiel. Ã‚Â»</blockquote>
+            <figcaption class="mt-3 text-slate-500">Ã¢â‚¬â€ Utilisateur test</figcaption>
+          </figure>
+          <figure class="bg-white border border-slate-200 rounded-2xl p-6 text-sm">
+            <blockquote>Ã‚Â« Enfin un outil ÃƒÂ©ducatif tenu par un pro de santÃƒÂ©, ÃƒÂ§a change des rÃƒÂ©gimes miracles. Ã‚Â»</blockquote>
+            <figcaption class="mt-3 text-slate-500">Ã¢â‚¬â€ Lectrice blog</figcaption>
+          </figure>
+          <figure class="bg-white border border-slate-200 rounded-2xl p-6 text-sm">
+            <blockquote>Ã‚Â« On pose une question et on a tout de suite une rÃƒÂ©ponse avec les sources, top. Ã‚Â»</blockquote>
+            <figcaption class="mt-3 text-slate-500">Ã¢â‚¬â€ AbonnÃƒÂ© newsletter</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="py-16 md:py-20">
+      <div class="mx-auto max-w-screen-xl px-4">
+        <h2 class="text-2xl md:text-3xl font-bold text-center">FAQ</h2>
+        <div class="mt-10 grid md:grid-cols-2 gap-6">
+          <details class="border border-slate-200 rounded-2xl p-4">
+            <summary class="font-semibold cursor-pointer">Est-ce que ce service remplace une consultation ?</summary>
+            <p class="mt-2 text-slate-600 text-sm">Non. Il sÃ¢â‚¬â„¢agit dÃ¢â‚¬â„¢information gÃƒÂ©nÃƒÂ©rale ÃƒÂ  visÃƒÂ©e ÃƒÂ©ducative. Pour une situation particuliÃƒÂ¨re, consultez un professionnel.</p>
+          </details>
+          <details class="border border-slate-200 rounded-2xl p-4">
+            <summary class="font-semibold cursor-pointer">Collectez-vous des donnÃƒÂ©es de santÃƒÂ© ?</summary>
+            <p class="mt-2 text-slate-600 text-sm">Non. Freemium ÃƒÂ©ducatif uniquement. Nom & email pour le compte/newsletter, cÃ¢â‚¬â„¢est tout.</p>
+          </details>
+          <details class="border border-slate-200 rounded-2xl p-4">
+            <summary class="font-semibold cursor-pointer">Combien de questions puis-je poser ?</summary>
+            <p class="mt-2 text-slate-600 text-sm">Freemium : 10 par jour. Premium : illimitÃƒÂ©.</p>
+          </details>
+          <details class="border border-slate-200 rounded-2xl p-4">
+            <summary class="font-semibold cursor-pointer">DÃ¢â‚¬â„¢oÃƒÂ¹ viennent les rÃƒÂ©ponses ?</summary>
+            <p class="mt-2 text-slate-600 text-sm">De vos supports pÃƒÂ©dagogiques indexÃƒÂ©s (RAG) et de sources officielles. Les rÃƒÂ©ponses affichent des citations.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Blog -->
+    <section id="blog" class="py-16 bg-slate-50">
+      <div class="mx-auto max-w-screen-xl px-4">
+        <h2 class="text-2xl md:text-3xl font-bold text-center">Derniers articles</h2>
+        <div class="grid md:grid-cols-3 gap-6 mt-10">
+          <article class="bg-white border border-slate-200 rounded-2xl p-5">
+            <h3 class="font-semibold">Apports journaliers recommandÃƒÂ©s : guide complet</h3>
+            <p class="text-sm text-slate-600 mt-2">Comprendre les repÃƒÂ¨res nutritionnels essentiels, simplement.</p>
+            <a href="#" class="mt-3 inline-block text-emerald-700 font-semibold">Lire Ã¢â€ â€™</a>
+          </article>
+          <article class="bg-white border border-slate-200 rounded-2xl p-5">
+            <h3 class="font-semibold">Combien de protÃƒÂ©ines par jour ?</h3>
+            <p class="text-sm text-slate-600 mt-2">Les bases sourcÃƒÂ©es pour y voir clair sans surconsommer.</p>
+            <a href="#" class="mt-3 inline-block text-emerald-700 font-semibold">Lire Ã¢â€ â€™</a>
+          </article>
+          <article class="bg-white border border-slate-200 rounded-2xl p-5">
+            <h3 class="font-semibold">Menu ÃƒÂ©quilibrÃƒÂ© sur une semaine</h3>
+            <p class="text-sm text-slate-600 mt-2">Des idÃƒÂ©es simples et variÃƒÂ©es pour sÃ¢â‚¬â„¢organiser.</p>
+            <a href="#" class="mt-3 inline-block text-emerald-700 font-semibold">Lire Ã¢â€ â€™</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Signup -->
+    <section id="signup" class="py-16">
+      <div class="mx-auto max-w-2xl px-4">
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 md:p-8">
+          <h2 class="text-xl md:text-2xl font-bold">CrÃƒÂ©er un compte gratuit</h2>
+          <p class="text-slate-600 text-sm mt-1">Nom & email suffisent. Vous pourrez vous dÃƒÂ©sinscrire ÃƒÂ  tout moment.</p>
+
+          <form class="mt-6 grid gap-3">
+            <div>
+              <label class="text-sm font-medium">Nom</label>
+              <input type="text" class="mt-1 w-full rounded-xl border-slate-300 focus:border-emerald-600 focus:ring-emerald-600" placeholder="Ex. Marie Dupont" required />
+            </div>
+            <div>
+              <label class="text-sm font-medium">Email</label>
+              <input type="email" class="mt-1 w-full rounded-xl border-slate-300 focus:border-emerald-600 focus:ring-emerald-600" placeholder="vous@exemple.com" required />
+            </div>
+            <div>
+              <label class="text-sm font-medium">Mot de passe</label>
+              <input type="password" class="mt-1 w-full rounded-xl border-slate-300 focus:border-emerald-600 focus:ring-emerald-600" placeholder="Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢" required />
+            </div>
+            <label class="inline-flex items-start gap-2 mt-2 text-sm">
+              <input type="checkbox" class="mt-1 rounded border-slate-300" />
+              <span>Je souhaite recevoir la newsletter (facultatif).</span>
+            </label>
+            <button type="submit" class="mt-4 px-6 py-3 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 font-semibold">CrÃƒÂ©er mon compte</button>
+            <p class="text-xs text-slate-500">
+              En crÃƒÂ©ant un compte, vous acceptez nos <a href="#terms" class="underline">CGU</a> et notre <a href="#privacy" class="underline">Politique de confidentialitÃƒÂ©</a>.
+            </p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 py-10" id="privacy">
+      <div class="mx-auto max-w-screen-xl px-4 grid md:grid-cols-4 gap-8 text-sm">
+        <div>
+          <div class="flex items-center gap-2">
+            <img src="/assets/logo.svg" alt="Optimeal Health" class="h-8 w-8" />
+            <span class="font-semibold">Optimeal Health</span>
+          </div>
+          <p class="text-slate-600 mt-3">
+            Information gÃƒÂ©nÃƒÂ©rale ÃƒÂ  visÃƒÂ©e ÃƒÂ©ducative. Ne remplace pas un avis mÃƒÂ©dical. Aucune donnÃƒÂ©e de santÃƒÂ© collectÃƒÂ©e.
+          </p>
+        </div>
+        <div>
+          <h4 class="font-semibold">Produit</h4>
+          <ul class="mt-2 space-y-2">
+            <li><a href="#features" class="hover:text-emerald-700">FonctionnalitÃƒÂ©s</a></li>
+            <li><a href="#pricing" class="hover:text-emerald-700">Offres</a></li>
+            <li><a href="#blog" class="hover:text-emerald-700">Blog</a> Ã‚Â· <a href="/contact" class="hover:text-emerald-700">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold">LÃƒÂ©gal</h4>
+          <ul class="mt-2 space-y-2">
+            <li><a href="/mentions-legales" class="hover:text-emerald-700">Mentions lÃƒÂ©gales</a></li>
+            <li><a href="/politique-confidentialite" class="hover:text-emerald-700">ConfidentialitÃƒÂ©</a></li>
+            <li><a href="#terms" class="hover:text-emerald-700">CGU</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold">Contact</h4>
+          <ul class="mt-2 space-y-2">
+            <li><a href="mailto:contact@optimealhealth.com" class="hover:text-emerald-700">contact@optimealhealth.com</a></li>
+            <li>SIRET : 000 000 000 00000</li>
+            <li>HÃƒÂ©bergement : Cloud UE</li>
+          </ul>
+        </div>
+      </div>
+      <div class="mx-auto max-w-screen-xl px-4 text-xs text-slate-500 mt-6">
+        Ã‚Â© <span id="year"></span> Optimeal Health. Tous droits rÃƒÂ©servÃƒÂ©s.
+      </div>
+    </footer>
+
+    <!-- JS minimal -->
+    <script type="module">
+      // Menu mobile
+      const menuBtn = document.getElementById('menuBtn');
+      const mobileMenu = document.getElementById('mobileMenu');
+      if (menuBtn) menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+
+      // AnnÃƒÂ©e
+      const y = document.getElementById('year');
+      if (y) y.textContent = new Date().getFullYear().toString();
+
+      // Cookies (localStorage)
+      const cookieKey = 'cookie-consent-v1';
+      const banner = document.getElementById('cookie-banner');
+      const accept = document.getElementById('cookie-accept');
+      const reject = document.getElementById('cookie-reject');
+      if (banner && !localStorage.getItem(cookieKey)) {
+        banner.classList.remove('hidden');
+      }
+      const setConsent = (val) => { localStorage.setItem(cookieKey, val); banner?.classList.add('hidden'); };
+      accept?.addEventListener('click', () => setConsent('accepted'));
+      reject?.addEventListener('click', () => setConsent('rejected'));
+    </script>
+  </body>
+</html>

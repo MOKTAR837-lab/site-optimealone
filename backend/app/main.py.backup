@@ -1,0 +1,91 @@
+from fastapi import FastAPI, Depends, Query
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import text
+import httpx, asyncpg, os
+from typing import Optional
+
+from app.db.session import engine, get_db
+from app.db.base import Base
+from app.models import client as _
+from app.routers import clients
+from app.knowledge.cache import get_embedding_cache
+from app.knowledge.search import hybrid_search
+
+app = FastAPI(title="Optimeal API", version="0.2.0", root_path="/api", docs_url="/docs", redoc_url="/redoc", openapi_url="/openapi.json")
+
+@app.on_event("startup")
+async def on_startup():
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+@app.on_event("shutdown")
+async def on_shutdown():
+    await engine.dispose()
+
+app.include_router(clients.router)
+
+@app.get("/")
+async def root():
+    return {"ok": True, "version": "0.2.0"}
+
+@app.get("/ping-db")
+async def ping_db(db: AsyncSession = Depends(get_db)):
+    result = await db.execute(text("SELECT 1"))
+    return {"db": result.scalar_one()}
+
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
+
+@app.get("/cache/stats")
+async def cache_stats():
+    return get_embedding_cache().stats()
+
+@app.post("/search")
+async def search_knowledge(query: str, top_k: int = Query(default=5, ge=1, le=20), use_hybrid: bool = True, category: Optional[str] = None):
+    ollama_url = os.getenv("OLLAMA_URL", "http://host.docker.internal:11434")
+    embed_model = os.getenv("EMBED_MODEL", "nomic-embed-text")
+    cache = get_embedding_cache()
+    query_embedding = cache.get(query, embed_model)
+    if query_embedding is None:
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            resp = await client.post(f"{ollama_url}/api/embeddings", json={"model": embed_model, "prompt": query})
+            query_embedding = resp.json()["embedding"]
+        cache.set(query, embed_model, query_embedding)
+    dsn = f"postgresql://{os.getenv(\"POSTGRES_USER\")}:{os.getenv(\"POSTGRES_PASSWORD\")}@{os.getenv(\"POSTGRES_HOST\")}:{os.getenv(\"POSTGRES_PORT\")}/{os.getenv(\"POSTGRES_DB\")}"
+    conn = await asyncpg.connect(dsn)
+    try:
+        if use_hybrid:
+            results = await hybrid_search(conn, query_embedding, query, top_k, category)
+        else:
+            results_raw = await conn.fetch("SELECT cd.path, cd.category, cc.text, cc.header, 1-(ce.embedding<=>$1::vector) AS score FROM course_embeddings ce JOIN course_chunks cc ON ce.chunk_id=cc.id JOIN course_docs cd ON cc.doc_id=cd.id WHERE ($3::text IS NULL OR cd.category=$3) ORDER BY ce.embedding<=>$1::vector LIMIT $2", str(query_embedding), top_k, category)
+            results = [{"path": r["path"], "category": r["category"], "text": r["text"], "header": r["header"], "score": float(r["score"])} for r in results_raw]
+    finally:
+        await conn.close()
+    return {"query": query, "results": results, "count": len(results)}
+
+@app.post("/ask")
+async def ask_with_context(question: str, top_k: int = Query(default=3, ge=1, le=10), model: str = "llama3.2", category: Optional[str] = None):
+    ollama_url = os.getenv("OLLAMA_URL", "http://host.docker.internal:11434")
+    embed_model = os.getenv("EMBED_MODEL", "nomic-embed-text")
+    cache = get_embedding_cache()
+    query_embedding = cache.get(question, embed_model)
+    if query_embedding is None:
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            resp = await client.post(f"{ollama_url}/api/embeddings", json={"model": embed_model, "prompt": question})
+            query_embedding = resp.json()["embedding"]
+        cache.set(question, embed_model, query_embedding)
+    dsn = f"postgresql://{os.getenv(\"POSTGRES_USER\")}:{os.getenv(\"POSTGRES_PASSWORD\")}@{os.getenv(\"POSTGRES_HOST\")}:{os.getenv(\"POSTGRES_PORT\")}/{os.getenv(\"POSTGRES_DB\")}"
+    conn = await asyncpg.connect(dsn)
+    try:
+        results = await hybrid_search(conn, query_embedding, question, top_k, category)
+    finally:
+        await conn.close()
+    if not results:
+        return {"question": question, "answer": "Aucun document trouvé.", "sources": []}
+    context = "\n\n".join([f"[{r[\"path\"]}]\n{r[\"text\"]}" for r in results])
+    prompt = f"Tu es un assistant nutritionniste expert. Réponds à la question en te basant UNIQUEMENT sur le contexte fourni.\n\nContexte:\n{context}\n\nQuestion: {question}\n\nRéponse (en français):"
+    async with httpx.AsyncClient(timeout=60.0) as client:
+        resp = await client.post(f"{ollama_url}/api/generate", json={"model": model, "prompt": prompt, "stream": False})
+        answer = resp.json()["response"]
+    return {"question": question, "answer": answer, "sources": results, "count": len(results)}

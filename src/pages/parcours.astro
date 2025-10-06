@@ -1,0 +1,78 @@
+---
+export const prerender = false; // Page SSR (nécessaire pour traiter le POST)
+
+import groups from "../data/allergens.json";
+
+// Variables pour le rendu
+let result: any = null;
+let errorMsg: string | null = null;
+
+// Valeurs "sticky" (pré-remplies après POST)
+let sticky = {
+  age: "",
+  sexe: "",
+  taille_cm: "",
+  poids_kg: "",
+  activite: "modérée",
+  question: "",
+};
+
+// Allergies cochées (codes) pour l'état initial des cases
+let preselected: string[] = [];
+
+if (Astro.request.method === "POST") {
+  try {
+    // 1) Lire le formulaire envoyé à CETTE page (POST)
+    const fd = await Astro.request.formData();
+
+    // 2) Construire les valeurs "sticky" pour reremplir le formulaire
+    sticky = {
+      age: String(fd.get("age") ?? ""),
+      sexe: String(fd.get("sexe") ?? ""),
+      taille_cm: String(fd.get("taille_cm") ?? ""),
+      poids_kg: String(fd.get("poids_kg") ?? ""),
+      activite: String(fd.get("activite") ?? "modérée"),
+      question: String(fd.get("question") ?? ""),
+    };
+
+    // 3) Récupérer les allergies (JSON) pour cocher les cases + renvoyer au backend
+    try {
+      preselected = JSON.parse(String(fd.get("allergies") ?? "[]")) || [];
+      if (!Array.isArray(preselected)) preselected = [];
+    } catch {
+      preselected = [];
+    }
+
+    // 4) Relayer tel quel à l’API (form-urlencoded) — on garde ton contrat backend
+    const params = new URLSearchParams();
+    for (const [k, v] of fd.entries()) {
+      if (typeof v === "string") params.append(k, v);
+    }
+
+    const apiURL = new URL("/api/public/consultation", Astro.url.origin).toString();
+    const resp = await fetch(apiURL, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: params.toString(),
+    });
+
+    if (!resp.ok) {
+      try {
+        const err = await resp.json();
+        errorMsg = `Erreur API (${resp.status}) — ${err?.detail ?? "Détail indisponible"}`;
+      } catch {
+        errorMsg = `Erreur API (${resp.status})`;
+      }
+    } else {
+      result = await resp.json(); // { statut, brouillon, sources, warnings }
+    }
+  } catch (e: any) {
+    errorMsg = `Soumission invalide: ${e?.message ?? e}`;
+  }
+}
+---
+
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Parcours patient — Cons

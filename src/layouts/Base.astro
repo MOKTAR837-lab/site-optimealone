@@ -1,18 +1,17 @@
-
+﻿---
+const { title = 'OptimealHealth', description = '' } = Astro.props;
 ---
-import "../styles/global.css";  // <= AJOUT
-const { title = 'Optimeal Health', description = '' } = Astro.props;
----
-
 <!doctype html>
-<html lang='fr'>
+<html lang="fr">
   <head>
-    <meta charset='utf-8' />
-    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>{title}</title>
-    <meta name='description' content={description} />
+    <meta name="description" content={description} />
   </head>
-  <body class='min-h-dvh antialiased'>
-    <slot />
+  <body style="font-family:system-ui;margin:0">
+    <main style="padding:1.5rem;max-width:960px;margin:0 auto">
+      <slot />
+    </main>
   </body>
 </html>

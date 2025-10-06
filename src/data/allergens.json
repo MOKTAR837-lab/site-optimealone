@@ -1,0 +1,70 @@
+[
+  { "category": "Céréales (gluten)", "options": [
+    {"code":"wheat","label":"Blé"},
+    {"code":"rye","label":"Seigle"},
+    {"code":"barley","label":"Orge"},
+    {"code":"oats","label":"Avoine"},
+    {"code":"spelt","label":"Épeautre"},
+    {"code":"kamut","label":"Kamut"}
+  ]},
+  { "category": "Œufs & Lait", "options": [
+    {"code":"egg","label":"Œuf"},
+    {"code":"milk","label":"Lait"}
+  ]},
+  { "category": "Poissons / Crustacés / Mollusques", "options": [
+    {"code":"fish","label":"Poisson"},
+    {"code":"crustacean","label":"Crustacés (crevette, crabe, homard…)"},
+    {"code":"mollusc","label":"Mollusques (calmar, poulpe, huître…)"}
+  ]},
+  { "category": "Arachide & Soja", "options": [
+    {"code":"peanut","label":"Arachide (cacahuète)"},
+    {"code":"soy","label":"Soja"}
+  ]},
+  { "category": "Fruits à coque (noix)", "options": [
+    {"code":"almond","label":"Amande"},
+    {"code":"hazelnut","label":"Noisette"},
+    {"code":"walnut","label":"Noix"},
+    {"code":"cashew","label":"Noix de cajou"},
+    {"code":"pecan","label":"Noix de pécan"},
+    {"code":"brazil_nut","label":"Noix du Brésil"},
+    {"code":"pistachio","label":"Pistache"},
+    {"code":"macadamia","label":"Macadamia"},
+    {"code":"pine_nut","label":"Pignon de pin"}
+  ]},
+  { "category": "Graines, condiments", "options": [
+    {"code":"sesame","label":"Graines de sésame"},
+    {"code":"mustard","label":"Moutarde"},
+    {"code":"sunflower_seed","label":"Graines de tournesol"},
+    {"code":"poppy_seed","label":"Graines de pavot"},
+    {"code":"linseed","label":"Graines de lin"},
+    {"code":"chia","label":"Graines de chia"},
+    {"code":"pumpkin_seed","label":"Graines de courge"},
+    {"code":"coriander","label":"Coriandre"},
+    {"code":"cumin","label":"Cumin"}
+  ]},
+  { "category": "Légumineuses", "options": [
+    {"code":"lupin","label":"Lupin"},
+    {"code":"pea","label":"Pois"},
+    {"code":"lentil","label":"Lentilles"},
+    {"code":"chickpea","label":"Pois chiches"},
+    {"code":"kidney_bean","label":"Haricot rouge"}
+  ]},
+  { "category": "Légumes / Divers", "options": [
+    {"code":"celery","label":"Céleri"},
+    {"code":"garlic","label":"Ail"},
+    {"code":"onion","label":"Oignon"},
+    {"code":"tomato","label":"Tomate"},
+    {"code":"corn","label":"Maïs"},
+    {"code":"cocoa","label":"Cacao"}
+  ]},
+  { "category": "Fruits (fréquents)", "options": [
+    {"code":"kiwi","label":"Kiwi"},
+    {"code":"banana","label":"Banane"},
+    {"code":"strawberry","label":"Fraise"},
+    {"code":"peach","label":"Pêche"},
+    {"code":"apple","label":"Pomme"}
+  ]},
+  { "category": "Additifs", "options": [
+    {"code":"sulfites","label":"Anhydride sulfureux / Sulfites"}
+  ]}
+]

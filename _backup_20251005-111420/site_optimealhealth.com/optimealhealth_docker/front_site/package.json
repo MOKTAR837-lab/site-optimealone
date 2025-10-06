@@ -1,0 +1,29 @@
+{
+  "name": "optimealhealth-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@astrojs/node": "^9.4.4",
+    "@astrojs/react": "^4.4.0",
+    "@tailwindcss/vite": "^4.1.13",
+    "astro": "^5.14.1",
+    "tailwindcss": "^4.1.13",
+    "typescript": "^5.9.2"
+  },
+  "version": "1.0.0",
+  "description": "## Démarrage ```bash npm install cp .env.example .env npm run dev ```",
+  "main": "app.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

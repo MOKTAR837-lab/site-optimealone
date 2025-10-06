@@ -1,0 +1,89 @@
+# docker-compose.yml (prod-like)
+version: "3.9"
+
+services:
+  proxy:
+    image: nginx:1.25-alpine
+    container_name: optimeal-proxy
+    ports:
+      # Mets 80:80 sur Ubuntu. En dev Windows, tu peux utiliser 8080:80 si 80 est pris.
+      - "${HTTP_PORT:-80}:80"
+    volumes:
+      - ./deploy/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      web:
+        condition: service_healthy
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+    networks: [internal]
+
+  web:
+    build: ./front_site
+    container_name: optimeal-web
+    environment:
+      NODE_ENV: production
+      PORT: 4321
+      # Optionnel si ton app lit ces vars
+      BACKEND_URL: http://api:8000
+      API_BASE: /api/v1
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:4321/"]
+      interval: 30s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+    networks: [internal]
+
+  api:
+    build: ./backend
+    container_name: optimeal-api
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:${POSTGRES_PASSWORD}@db:5432/optimeal
+      API_KEY: ${API_KEY:-ta_cle_api_interne_tres_longue}
+      PYTHONUNBUFFERED: "1"
+    command: >
+      gunicorn app.main:app
+      -k uvicorn.workers.UvicornWorker
+      -w 2
+      -b 0.0.0.0:8000
+      --timeout 60
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8000/healthz"]
+      interval: 30s
+      timeout: 3s
+      retries: 5
+    depends_on:
+      db:
+        condition: service_started
+    restart: unless-stopped
+    networks: [internal]
+
+  services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: optimeal-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: optimeal
+      TZ: Europe/Paris
+      PGTZ: Europe/Paris
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks: [internal]
+
+  # Adminer (optionnel en dev)
+  # adminer:
+  #   image: adminer:latest
+  #   ports: ["8080:8080"]
+  #   depends_on: [db]
+  #   networks: [internal]
+
+volumes:
+  postgres_data:
+
+networks:
+  internal:
+    driver: bridge

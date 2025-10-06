@@ -1,0 +1,7 @@
+node_modules
+.git
+.gitignore
+Dockerfile
+Dockerfile.web
+deploy/nginx/*.md
+.env*
