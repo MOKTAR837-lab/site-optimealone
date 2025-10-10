@@ -32,3 +32,10 @@ build/
 .DS_Store
 *.log
 _backup_*/
+*.bak
+*.backup*
+*.log
+*_backup_*
+openapi_raw.txt
+openapi_debug.json
+*.tmp
