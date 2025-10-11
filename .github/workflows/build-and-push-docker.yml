@@ -36,10 +36,12 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Extract metadata (tags, labels)
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ghcr.io/${{ github.repository }}
+  id: meta
+  uses: docker/metadata-action@v5
+  with:
+    images: ghcr.io/${{ github.repository }}
+    flavor: |
+      latest=true
 
       - name: Build and push
         uses: docker/build-push-action@v6
