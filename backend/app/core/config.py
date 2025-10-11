@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 import json
 from typing import List, Optional
 
@@ -7,14 +7,14 @@ from pydantic import field_validator
 
 class Settings(BaseSettings):
     # Projet / API
-    PROJECT_NAME: str = "OptimealHealth"
+    PROJECT_NAME: str = "optimealone"
     API_V1: str = "/api/v1"
 
-    # Base de données (ASYNC !)
-    # valeur par défaut cohérente avec ton docker-compose (postgres/postgres)
+    # Base de donnÃ©es (ASYNC !)
+    # valeur par dÃ©faut cohÃ©rente avec ton docker-compose (postgres/postgres)
     DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@db:5432/optimeal"
 
-    # Sécurité & Auth
+    # SÃ©curitÃ© & Auth
     API_KEY: Optional[str] = None
     JWT_SECRET: str = "change-me"
     JWT_ALG: str = "HS256"
