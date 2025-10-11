@@ -36,7 +36,9 @@ jobs:
           tags: |
             type=raw,value=latest
             type=raw,value=${{ github.sha }}
-          labels: |
+          
+            type=sha
+labels: |
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.source=${{ github.repository }}
 
@@ -51,3 +53,4 @@ jobs:
             CACHE_BUST=${{ github.run_id }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
