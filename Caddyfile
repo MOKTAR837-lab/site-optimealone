@@ -1,0 +1,31 @@
+﻿{
+  email admin@optimealhealth.example.com
+  # logging basique
+  log {
+    output stdout
+    format console
+    level INFO
+  }
+  # compression
+  encode gzip zstd
+}
+
+optimealhealth.example.com {
+  @secureHeaders {
+    header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    header X-Content-Type-Options "nosniff"
+    header X-Frame-Options "DENY"
+    header Referrer-Policy "strict-origin-when-cross-origin"
+    header Content-Security-Policy "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:;"
+  }
+
+  handle {
+    import secureHeaders
+    reverse_proxy web:8080
+  }
+
+  @health {
+    path /health
+  }
+  respond @health 200
+}

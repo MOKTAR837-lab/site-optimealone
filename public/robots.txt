@@ -1,4 +1,5 @@
 ﻿User-agent: *
 Disallow:
 
-Sitemap: https://optimealhealth.com/sitemap.xml
+Sitemap: https://optimealone.com/sitemap.xml
+
