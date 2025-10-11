@@ -1,17 +1,16 @@
 ﻿{
   email admin@optimealhealth.example.com
-  # logging basique
   log {
     output stdout
     format console
     level INFO
   }
-  # compression
   encode gzip zstd
 }
 
 optimealhealth.example.com {
-  @secureHeaders {
+  # Snippet de headers de sécurité
+  (secHeaders) {
     header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
     header X-Content-Type-Options "nosniff"
     header X-Frame-Options "DENY"
@@ -20,7 +19,7 @@ optimealhealth.example.com {
   }
 
   handle {
-    import secureHeaders
+    import secHeaders
     reverse_proxy web:8080
   }
 
