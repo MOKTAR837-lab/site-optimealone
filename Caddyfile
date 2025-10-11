@@ -1,5 +1,5 @@
 ﻿{
-  email admin@optimealone.example.com
+  auto_https off
   log {
     output stdout
     format console
@@ -7,19 +7,8 @@
   }
 }
 
-optimealone.example.com {
+:80 {
   encode gzip zstd
-
-  header {
-    Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
-    X-Content-Type-Options "nosniff"
-    X-Frame-Options "DENY"
-    Referrer-Policy "strict-origin-when-cross-origin"
-    Content-Security-Policy "default-src '\''self'\'' '\''unsafe-inline'\'' '\''unsafe-eval'\'' data: blob: https:;"
-  }
-
-  @health { path /health }
-  respond @health 200
-
+  respond /health 200
   reverse_proxy web:80
 }
