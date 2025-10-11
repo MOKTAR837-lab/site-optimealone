@@ -1,8 +1,8 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <title>Contact – Optimeal Health</title>
+  <title>Contact â€“ Optimealone</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;max-width:760px;margin:2rem auto;padding:0 1rem;}
@@ -14,12 +14,12 @@
   </style>
 </head>
 <body>
-  <p><a href="/index.html">← Retour</a></p>
+  <p><a href="/index.html">â† Retour</a></p>
   <h1>Contact</h1>
-  <p>Site pédagogique : laissez vos coordonnées, on vous recontacte.</p>
+  <p>Site pÃ©dagogique : laissez vos coordonnÃ©es, on vous recontacte.</p>
 
   <form id="contactForm">
-    <label>Prénom<br><input name="firstname" required></label>
+    <label>PrÃ©nom<br><input name="firstname" required></label>
     <label>Nom<br><input name="lastname" required></label>
     <label>Email<br><input type="email" name="email" required></label>
     <button type="submit">Envoyer</button>
@@ -51,14 +51,14 @@
             mode:"cors"
           });
           if(res.status===202){
-            out.className="ok"; out.textContent="Merci ! Nous vous recontactons rapidement ✅";
+            out.className="ok"; out.textContent="Merci ! Nous vous recontactons rapidement âœ…";
             f.reset();
           }else{
             const err=await res.json().catch(()=>({}));
             out.className="err"; out.textContent = "Erreur: " + (err.detail? JSON.stringify(err.detail) : `${res.status} ${res.statusText}`);
           }
         }catch(e2){
-          out.className="err"; out.textContent="Erreur réseau: "+e2;
+          out.className="err"; out.textContent="Erreur rÃ©seau: "+e2;
         }
       });
     });
