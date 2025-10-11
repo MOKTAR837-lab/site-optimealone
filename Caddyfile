@@ -1,5 +1,5 @@
 ﻿{
-  email admin@optimealhealth.example.com
+  email admin@optimealone.example.com
   log {
     output stdout
     format console
@@ -8,23 +8,20 @@
   encode gzip zstd
 }
 
-optimealhealth.example.com {
-  # Snippet de headers de sécurité
-  (secHeaders) {
-    header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
-    header X-Content-Type-Options "nosniff"
-    header X-Frame-Options "DENY"
-    header Referrer-Policy "strict-origin-when-cross-origin"
-    header Content-Security-Policy "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:;"
-  }
+# --- Snippet GLOBAL de headers (déclaré hors d'un site) ---
+(secHeaders) {
+  header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+  header X-Content-Type-Options "nosniff"
+  header X-Frame-Options "DENY"
+  header Referrer-Policy "strict-origin-when-cross-origin"
+  header Content-Security-Policy "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:;"
+}
 
-  handle {
-    import secHeaders
-    reverse_proxy web:8080
-  }
+optimealone.example.com {
+  import secHeaders
 
-  @health {
-    path /health
-  }
+  @health { path /health }
   respond @health 200
+
+  reverse_proxy web:8080
 }
