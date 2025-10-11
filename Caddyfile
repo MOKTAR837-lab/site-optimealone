@@ -5,23 +5,21 @@
     format console
     level INFO
   }
-  encode gzip zstd
-}
-
-# --- Snippet GLOBAL de headers (déclaré hors d'un site) ---
-(secHeaders) {
-  header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
-  header X-Content-Type-Options "nosniff"
-  header X-Frame-Options "DENY"
-  header Referrer-Policy "strict-origin-when-cross-origin"
-  header Content-Security-Policy "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:;"
 }
 
 optimealone.example.com {
-  import secHeaders
+  encode gzip zstd
+
+  header {
+    Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    X-Content-Type-Options "nosniff"
+    X-Frame-Options "DENY"
+    Referrer-Policy "strict-origin-when-cross-origin"
+    Content-Security-Policy "default-src '\''self'\'' '\''unsafe-inline'\'' '\''unsafe-eval'\'' data: blob: https:;"
+  }
 
   @health { path /health }
   respond @health 200
 
-  reverse_proxy web:8080
+  reverse_proxy web:80
 }

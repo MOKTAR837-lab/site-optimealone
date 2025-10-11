@@ -1,28 +1,13 @@
-﻿# syntax=docker/dockerfile:1
-
+﻿# --- Build ---
 FROM node:20-alpine AS build
 WORKDIR /app
-
-# Installer deps (lockfile recommandé si tu l'as)
 COPY package*.json ./
 RUN npm ci
-
-# Copier le code et builder en SSR
 COPY . .
 RUN npm run build
 
-# --- RUNTIME (SSR Node) ---
-FROM node:20-alpine AS runtime
-WORKDIR /app
-ENV NODE_ENV=production
-ENV HOST=0.0.0.0
-ENV PORT=4321
-
-# Copie la sortie Astro (contient server/entry.mjs + chunks)
-COPY --from=build /app/dist/ ./
-# Copie node_modules et package.json pour les deps runtime (ex: kleur)
-COPY --from=build /app/node_modules ./node_modules
-COPY --from=build /app/package*.json ./
-
-EXPOSE 4321
-CMD ["node", "./server/entry.mjs"]
+# --- Runtime (static) ---
+FROM nginx:alpine
+COPY --from=build /app/dist /usr/share/nginx/html
+HEALTHCHECK CMD wget -qO- http://127.0.0.1/ >/dev/null || exit 1
+EXPOSE 80
