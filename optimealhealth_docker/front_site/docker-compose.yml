@@ -1,0 +1,53 @@
+﻿services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: optimealone-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-optimeal}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-optimeal_password_2025}
+      POSTGRES_DB: ${POSTGRES_DB:-optimeal}
+    volumes:
+      - optimealone_postgres_data:/var/lib/postgresql/data
+    networks:
+      - optimealone
+
+  redis:
+    image: redis:7-alpine
+    container_name: optimealone-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - optimealone
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: optimealone-api
+    ports:
+      - "8000:80"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-optimeal}:${POSTGRES_PASSWORD:-optimeal_password_2025}@postgres:5432/${POSTGRES_DB:-optimeal}
+      REDIS_URL: redis://redis:6379
+      OLLAMA_URL: ${OLLAMA_URL:-http://host.docker.internal:11434}
+      EMBED_MODEL: ${EMBED_MODEL:-nomic-embed-text}
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - optimealone
+
+  web:
+    image: ghcr.io/moktar837-lab/site-optimealone:latest
+    container_name: optimealone-web
+    ports:
+      - "8080:80"
+    networks:
+      - optimealone
+
+volumes:
+  optimealone_postgres_data:
+
+networks:
+  optimealone:
+    name: optimealone_network

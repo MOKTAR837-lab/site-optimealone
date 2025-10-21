@@ -1,0 +1,35 @@
+---
+interface Props { title?: string; description?: string }
+const { title = "Optimealone", description = "" } = Astro.props as Props;
+---
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="stylesheet" href="/src/styles/global.css" />
+  </head>
+  <body class="min-h-screen bg-gradient-to-b from-brand-50 to-white text-slate-900">
+    <header class="bg-gradient-to-r from-brand-600 to-accent-600 text-white">
+      <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <a href="/" class="font-semibold tracking-tight">Optimealone</a>
+        <nav class="flex gap-4 text-sm">
+          <a href="/assistant-ia" class="hover:underline">Assistant IA</a>
+          <a href="/menu-analyzer" class="hover:underline">Menu</a>
+          <a href="/metabolic-calculator" class="hover:underline">MÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â©tabolique</a>
+          <a href="/login" class="px-3 py-1 rounded bg-white/10 hover:bg-white/20">Connexion</a>
+        </nav>
+      </div>
+    </header>
+    <main class="pb-16">
+      <slot />
+    </main>
+    <footer class="border-t">
+      <div class="max-w-7xl mx-auto px-6 py-6 text-sm text-gray-600">
+        ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â© {new Date().getFullYear()} Optimealone
+      </div>
+    </footer>
+  </body>
+</html>

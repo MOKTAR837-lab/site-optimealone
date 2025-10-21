@@ -1,0 +1,16 @@
+fastapi
+uvicorn[standard]==0.30.6
+sqlalchemy[asyncio]
+asyncpg==0.29.0
+alembic==1.13.2
+pydantic-settings
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
+email-validator
+gunicorn==22.0.0
+httpx
+asyncpg
+redis
+pgvector
+sentence-transformers
