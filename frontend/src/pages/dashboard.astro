@@ -1,0 +1,26 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Dashboard - OptimealOne">
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8">Mon Dashboard</h1>
+    <div id="dashboard" class="bg-white p-6 rounded-lg shadow">
+      <p>Chargement...</p>
+    </div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('optimealone_token');
+    if (!token) {
+      window.location.href = '/auth/login';
+    } else {
+      fetch('http://localhost:8000/quota', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      })
+      .then(r => r.json())
+      .then(data => {
+        document.getElementById('dashboard').innerHTML = '<h2 class="text-xl font-bold mb-4">Quota</h2><p class="text-3xl font-bold text-emerald-600">' + (data.quota?.remaining || 0) + '</p><p class="text-gray-600">analyses restantes</p>';
+      });
+    }
+  </script>
+</Layout>

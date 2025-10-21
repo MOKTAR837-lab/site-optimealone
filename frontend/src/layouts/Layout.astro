@@ -1,0 +1,21 @@
+---
+import Navigation from '../components/layout/Navigation';
+const { title = 'OptimealOne' } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+</head>
+<body class="bg-gray-50">
+  <Navigation client:load />
+  <main>
+    <slot />
+  </main>
+  <footer class="bg-white border-t mt-16 py-8 text-center text-gray-600 text-sm">
+    <p>&copy; 2025 OptimealOne. Tous droits reserves.</p>
+  </footer>
+</body>
+</html>
